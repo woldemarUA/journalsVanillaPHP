@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebSocket Test</title>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            // Replace "ws://localhost:8080" with the appropriate WebSocket server URL
+            var conn = new WebSocket('ws://localhost:8080');
+
+            conn.onopen = function (e) {
+                console.log("Connection established!");
+                conn.send('Hello from the browser!');
+            };
+
+            conn.onmessage = function (e) {
+                console.log("Received: ", e.data);
+            };
+
+            conn.onerror = function (e) {
+                console.log("Error: ", e);
+            };
+
+            conn.onclose = function (e) {
+                console.log("Connection closed!");
+            };
+        });
+    </script>
+</head>
+
+<body>
+    <h1>WebSocket Test</h1>
+</body>
+
+</html>

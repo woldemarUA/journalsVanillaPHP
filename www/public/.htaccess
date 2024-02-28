@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Assurez-vous que la base de réécriture est correcte ; elle est '/' si le fichier .htaccess est dans le répertoire racine
+RewriteBase /
+
+# Redirige toutes les requêtes ne pointant pas vers des fichiers ou des répertoires réels vers index.php
+# Pour la configuration Apache, voir par exemple : \etc\apache2\sites-available\000-default.conf
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Réécrit le chemin de l'URL comme un paramètre de requête pour que index.php puisse le gérer
+RewriteRule ^(.*)$ index.php?page=$1 [QSA,L]
+

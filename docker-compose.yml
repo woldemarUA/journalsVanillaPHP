@@ -1,0 +1,53 @@
+version: '3.9' # Spécifie la version de la syntaxe du fichier Docker Compose.
+
+services: # Définit les services de votre application.
+  web: # Service web pour l'application PHP.
+    build: ./www # Construit l'image Docker à partir du dossier 'www'.
+    ports:
+      - '80:80' # Lie le port 80 du conteneur au port 80 de l'hôte.
+    volumes:
+      - ./www:/var/www/html/ # Monte le dossier 'www' local dans le conteneur.
+    networks:
+      - my_php_chat # Connecte ce service au réseau 'my_php_chat'.
+
+  db: # Service de base de données MySQL.
+    image: mysql:8.0.36 # Utilise l'image MySQL version 8.0.36.
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always # Redémarre le conteneur automatiquement.
+    environment: # Variables d'environnement pour MySQL.
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    volumes:
+      - dbdata:/var/lib/mysql # Stockage persistant pour les données MySQL.
+      - ./db/db.sql:/docker-entrypoint-initdb.d/db.sql # Initialise la base de données.
+    networks:
+      - my_php_chat # Connecte ce service au réseau 'my_php_chat'.
+
+  ratchet: # Service pour le WebSocket avec Ratchet.
+    build:
+      context: ./wc
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080' # Lie le port 8080 du conteneur au port 8080 de l'hôte.
+    volumes:
+      - ./wc:/app # Monte le dossier 'wc' local dans le conteneur.
+    networks:
+      - my_php_chat # Connecte ce service au réseau 'my_php_chat'.
+    # command: tail -f /dev/null # Override the default CMD in Dockerfile
+    depends_on:
+      - db
+  phpmyadmin: # Service pour PHPMyAdmin.
+    image: phpmyadmin/phpmyadmin # Utilise l'image PHPMyAdmin.
+    ports:
+      - '81:80' # Lie le port 81 de l'hôte au port 80 du conteneur.
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - my_php_chat # Connecte ce service au réseau 'my_php_chat'.
+
+networks: # Définit les réseaux utilisés par les services.
+  my_php_chat: # Réseau personnalisé pour faciliter la communication entre les services.
+
+volumes: # Définit les volumes pour le stockage persistant.
+  dbdata: # Volume pour les données de la base de données MySQL.

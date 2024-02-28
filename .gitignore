@@ -1,0 +1,51 @@
+# Fichiers de configuration et d'environnement
+/.env
+/docker-compose.override.yml
+
+# Dossiers des dépendances
+/vendor/
+/wc/vendor/
+
+# Fichiers spécifiques à Composer
+/composer.lock
+/composer.phar
+/wc/composer.lock
+/wc/composer.phar
+
+# Dossiers et fichiers générés, logs, cache
+/node_modules/
+/.DS_Store
+/*.log
+/tmp/
+/cache/
+
+# Fichiers et dossiers spécifiques à Docker qui ne devraient pas être suivis
+**/Dockerfile
+db/
+*.sql
+*.sql.gz
+
+# Documentation et fichiers README qui n'ont pas besoin d'être suivis par Git
+/README.md
+
+# Fichiers spécifiques aux éditeurs de texte ou IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Dossiers de stockage et fichiers de logs
+/www/storage/
+/www/logs/
+
+# Fichiers de certificats SSL locaux
+/*.pem
+/*.key
+
+# Fichiers et dossiers générés dynamiquement
+/public/uploads/
+
+# Fichiers tasks.php pour éviter le suivi des scripts de tâches spécifiques au développement ou à la production
+/tasks.php
+/wc/tasks.php
+
